@@ -32,6 +32,13 @@ function showFolders(folders, selected) {
 
 function showTracks() {
   $('#track').replaceChildren(...videos.map((item, index) => new Option(item.title, index)));
+  syncTrackSelection();
+}
+
+function syncTrackSelection() {
+  const current = player.videos?.[player.index];
+  const index = current ? videos.findIndex(item => item.bvid === current.bvid) : -1;
+  if (index >= 0) $('#track').value = index;
 }
 
 async function loadFolders(force = false) {
@@ -102,7 +109,7 @@ function render() {
     $('#title').title = video.title;
     $('#cover').src = video.cover;
     $('#position').textContent = `${player.index + 1} / ${player.videos.length}`;
-    $('#track').value = player.index;
+    syncTrackSelection();
   }
   document.body.classList.toggle('playing', !player.paused);
   $('#toggle').dataset.paused = player.paused;
@@ -124,7 +131,14 @@ $('#folder').addEventListener('change', async () => {
   await chrome.storage.local.set({ folderId: $('#folder').value });
   loadVideos(false);
 });
-$('#track').addEventListener('change', () => status('点击播放，将从这首开始'));
+$('#track').addEventListener('change', async () => {
+  const index = Number($('#track').value);
+  const current = player.videos?.[player.index];
+  if (!videos[index] || videos[index].bvid === current?.bvid) return;
+  status(`正在切换到：${videos[index].title}`);
+  await chrome.runtime.sendMessage({ type: 'start', videos, index, mode: player.mode });
+  setTimeout(refreshPlayer, 300);
+});
 $('#toggle').addEventListener('click', async () => {
   if (player.index < 0 || !player.videos?.length) {
     if (!videos.length) return;

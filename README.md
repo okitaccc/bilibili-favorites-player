@@ -4,7 +4,13 @@
 
 ## 界面预览
 
+### 独立播放器窗口
+
 ![日间模式播放器](docs/screenshots/player-light.png)
+
+### 工具栏弹窗
+
+![工具栏播放器弹窗](docs/screenshots/player-popup.png)
 
 ## 功能
 
