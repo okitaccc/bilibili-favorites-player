@@ -60,7 +60,11 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
     else if (message.type === 'toggle') {
       if (state.tabId) chrome.tabs.sendMessage(state.tabId, message).catch(() => {});
       else await play(0, state.index);
-    } else if ((message.type === 'seek' || message.type === 'volume') && state.tabId) chrome.tabs.sendMessage(state.tabId, message).catch(() => {});
+    } else if (message.type === 'volume') {
+      state.volume = message.value;
+      await save();
+      if (state.tabId) chrome.tabs.sendMessage(state.tabId, message).catch(() => {});
+    } else if (message.type === 'seek' && state.tabId) chrome.tabs.sendMessage(state.tabId, message).catch(() => {});
     else if (message.type === 'mediaState' && sender.tab?.id === state.tabId) { syncMedia(message); await save(); }
     respond({ ok: true });
   })();
