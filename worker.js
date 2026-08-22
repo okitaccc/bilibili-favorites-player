@@ -51,10 +51,12 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
   (async () => {
     await ready;
     if (message.type === 'getState') return respond(state);
+    if (message.type === 'isPlayerTab') return respond({ managed: sender.tab?.id === state.tabId });
     if (message.type === 'start') {
       state = { ...state, videos: message.videos, mode: message.mode, index: -1 };
       await play(1, message.index);
-    } else if (message.type === 'next' || message.type === 'ended') await play(1);
+    } else if (message.type === 'next') await play(1);
+    else if (message.type === 'ended' && sender.tab?.id === state.tabId) await play(1);
     else if (message.type === 'prev') await play(-1);
     else if (message.type === 'mode') { state.mode = message.mode; await save(); }
     else if (message.type === 'toggle') {

@@ -29,10 +29,12 @@ async function tryPlay() {
   catch { report({ blocked: true }); }
 }
 
-function attach() {
+async function attach() {
   const found = findVideo();
   if (!found || found === video) return;
   video = found;
+  const result = await chrome.runtime.sendMessage({ type: 'isPlayerTab' }).catch(() => null);
+  if (!result?.managed) return;
   video.addEventListener('ended', () => chrome.runtime.sendMessage({ type: 'ended' }));
   video.addEventListener('play', report);
   video.addEventListener('pause', report);
