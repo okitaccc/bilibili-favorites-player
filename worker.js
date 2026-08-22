@@ -1,4 +1,4 @@
-let state = { videos: [], index: -1, mode: 'loop', tabId: null, paused: true, currentTime: 0, duration: 0, blocked: false, currentVideo: null };
+let state = { videos: [], index: -1, mode: 'loop', tabId: null, paused: true, currentTime: 0, duration: 0, volume: 1, blocked: false, currentVideo: null };
 const ready = chrome.storage.session.get('playerState').then(saved => { if (saved.playerState) state = saved.playerState; });
 const save = () => chrome.storage.session.set({ playerState: state });
 
@@ -42,6 +42,7 @@ function syncMedia(message) {
     paused: message.paused,
     currentTime: message.currentTime,
     duration: message.duration,
+    volume: message.volume,
     blocked: message.blocked
   });
 }
@@ -59,7 +60,7 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
     else if (message.type === 'toggle') {
       if (state.tabId) chrome.tabs.sendMessage(state.tabId, message).catch(() => {});
       else await play(0, state.index);
-    } else if (message.type === 'seek' && state.tabId) chrome.tabs.sendMessage(state.tabId, message).catch(() => {});
+    } else if ((message.type === 'seek' || message.type === 'volume') && state.tabId) chrome.tabs.sendMessage(state.tabId, message).catch(() => {});
     else if (message.type === 'mediaState' && sender.tab?.id === state.tabId) { syncMedia(message); await save(); }
     respond({ ok: true });
   })();

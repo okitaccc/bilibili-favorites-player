@@ -117,6 +117,7 @@ function render() {
   $('#current').textContent = time(player.currentTime);
   $('#duration').textContent = time(player.duration);
   $('#progress').value = player.duration ? player.currentTime / player.duration * 100 : 0;
+  if (document.activeElement !== $('#volume')) $('#volume').value = player.volume ?? 1;
   $('#mode').dataset.mode = player.mode;
   $('#mode').title = player.mode === 'shuffle' ? '随机播放' : '列表循环';
   if (player.blocked) status('浏览器拦截了自动播放：请在播放标签页手动播放一次');
@@ -155,6 +156,7 @@ $('#mode').addEventListener('click', async () => {
 });
 $('#reload').addEventListener('click', () => loadFolders(true));
 $('#progress').addEventListener('change', () => chrome.runtime.sendMessage({ type: 'seek', ratio: Number($('#progress').value) / 100 }));
+$('#volume').addEventListener('input', () => chrome.runtime.sendMessage({ type: 'volume', value: Number($('#volume').value) }));
 $('#theme').addEventListener('click', async () => {
   const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
   document.documentElement.dataset.theme = theme;

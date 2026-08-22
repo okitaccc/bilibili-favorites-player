@@ -31,8 +31,9 @@
   .icon-shuffle, .icon-sun, .icon-pause { display: none; }
   #mode[data-mode="shuffle"] .icon-repeat, :root[data-theme="dark"] #theme .icon-moon, #toggle[data-paused="false"] .icon-play { display: none; }
   #mode[data-mode="shuffle"] .icon-shuffle, :root[data-theme="dark"] #theme .icon-sun, #toggle[data-paused="false"] .icon-pause { display: block; }
-  .timeline { display: grid; grid-template-columns: 38px 1fr 38px; gap: 8px; align-items: center; margin: 10px 0 12px 65px; color: var(--muted); font: 10px ui-monospace, monospace; }
-  #progress { width: 100%; height: 5px; accent-color: #fb7299; cursor: pointer; }
+  .timeline { display: grid; grid-template-columns: 38px minmax(120px, 1fr) 38px 18px 76px; gap: 8px; align-items: center; margin: 10px 0 12px 65px; color: var(--muted); font: 10px ui-monospace, monospace; }
+  #progress, #volume { width: 100%; height: 5px; accent-color: #fb7299; cursor: pointer; }
+  .volume-icon { width: 17px; height: 17px; }
   .library { display: grid; grid-template-columns: 1fr 1.5fr; gap: 9px; padding-top: 11px; border-top: 1px solid var(--line); }
   select { min-width: 0; padding: 8px 10px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--soft); color: var(--text); font-weight: 500; }
   #status { min-height: 15px; margin: 7px 2px 0; color: var(--muted); font-size: 11px; }
@@ -59,6 +60,8 @@
     <span id="current">00:00</span>
     <input id="progress" type="range" min="0" max="100" value="0" aria-label="播放进度">
     <span id="duration">00:00</span>
+    <svg class="icon volume-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12"/></svg>
+    <input id="volume" type="range" min="0" max="1" step="0.01" value="1" aria-label="音量">
   </div>
   <div class="library">
     <select id="folder" aria-label="收藏夹"><option>正在读取收藏夹…</option></select>
