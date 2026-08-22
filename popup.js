@@ -36,9 +36,9 @@ function showTracks() {
 }
 
 function syncTrackSelection() {
-  const current = player.videos?.[player.index];
+  const current = player.currentVideo || player.videos?.[player.index];
   const index = current ? videos.findIndex(item => item.bvid === current.bvid) : -1;
-  if (index >= 0) $('#track').value = index;
+  $('#track').selectedIndex = index;
 }
 
 async function loadFolders(force = false) {
@@ -103,12 +103,12 @@ function time(seconds = 0) {
 }
 
 function render() {
-  const video = player.videos?.[player.index];
+  const video = player.currentVideo || player.videos?.[player.index];
   if (video) {
     $('#title').textContent = video.title;
     $('#title').title = video.title;
-    $('#cover').src = video.cover;
-    $('#position').textContent = `${player.index + 1} / ${player.videos.length}`;
+    if (video.cover) $('#cover').src = video.cover;
+    $('#position').textContent = player.currentVideo ? '网页正在播放' : `${player.index + 1} / ${player.videos.length}`;
     syncTrackSelection();
   }
   document.body.classList.toggle('playing', !player.paused);
