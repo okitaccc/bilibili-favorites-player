@@ -24,7 +24,14 @@ function report(extra = {}) {
   });
 }
 
-async function tryPlay() {
+async function tryPlay(fromStart = false) {
+  if (fromStart) {
+    const startingVideo = video;
+    const reset = () => { if (video === startingVideo && startingVideo.readyState >= 1) startingVideo.currentTime = 0; };
+    if (startingVideo.readyState >= 1) reset();
+    else startingVideo.addEventListener('loadedmetadata', reset, { once: true });
+    startingVideo.addEventListener('playing', reset, { once: true });
+  }
   try { await video.play(); report(); }
   catch { report({ blocked: true }); }
 }
@@ -40,7 +47,7 @@ async function attach() {
   video.addEventListener('pause', report);
   video.addEventListener('timeupdate', report);
   video.addEventListener('volumechange', report);
-  tryPlay();
+  tryPlay(true);
 }
 
 chrome.runtime.onMessage.addListener(message => {

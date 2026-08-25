@@ -15,7 +15,7 @@ async function play(step = 1, exactIndex) {
   if (!state.videos.length) return;
   state.index = exactIndex ?? pick(step);
   Object.assign(state, { paused: false, currentTime: 0, duration: 0, blocked: false, currentVideo: null });
-  const url = `https://www.bilibili.com/video/${state.videos[state.index].bvid}/?autoplay=1`;
+  const url = `https://www.bilibili.com/video/${state.videos[state.index].bvid}/?autoplay=1&t=0`;
   try {
     if (state.tabId) {
       await chrome.tabs.update(state.tabId, { url, active: false });
