@@ -117,6 +117,8 @@ function render() {
   $('#current').textContent = time(player.currentTime);
   $('#duration').textContent = time(player.duration);
   $('#progress').value = player.duration ? player.currentTime / player.duration * 100 : 0;
+  $('#lyric').textContent = player.lyric || '当前视频没有可用字幕';
+  $('#lyric').title = player.lyric || '';
   if (document.activeElement !== $('#volume')) $('#volume').value = player.volume ?? 1;
   $('#mode').dataset.mode = player.mode;
   $('#mode').title = player.mode === 'shuffle' ? '随机播放' : '列表循环';

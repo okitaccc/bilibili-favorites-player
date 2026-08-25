@@ -13,6 +13,7 @@ function report(extra = {}) {
   chrome.runtime.sendMessage({
     type: 'mediaState',
     bvid: location.pathname.match(/\/video\/(BV[\w]+)/i)?.[1],
+    page: Number(new URLSearchParams(location.search).get('p')) || 1,
     videoTitle: document.querySelector('h1.video-title,.video-title')?.textContent?.trim() || document.title.replace(/_哔哩哔哩_bilibili$/, ''),
     cover: document.querySelector('meta[property="og:image"]')?.content,
     paused: active.paused,

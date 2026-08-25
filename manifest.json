@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "description": "把 B 站收藏夹当作后台播放列表使用。",
   "permissions": ["storage", "tabs"],
-  "host_permissions": ["https://api.bilibili.com/*", "https://www.bilibili.com/*"],
+  "host_permissions": ["https://api.bilibili.com/*", "https://www.bilibili.com/*", "https://*.hdslb.com/*"],
   "action": {
     "default_title": "B站收藏夹播放器",
     "default_popup": "popup.html"
